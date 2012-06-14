@@ -10,7 +10,12 @@ var debug = require('debug')('array-index')
  * A harmony proxy impl could help.
  */
 
-var e = module.exports = {}
+module.exports = ArrayIndex
+function ArrayIndex (length) {
+  this.__ensureLength__(length)
+}
+
+var e = ArrayIndex.prototype
 
 e.__ensureLength__ = function ensureLength (_length) {
   var length = _length | 0
@@ -31,11 +36,11 @@ e.__ensureLength__ = function ensureLength (_length) {
 }
 
 e.__get__ = function () {
-  throw new Error('you have to implement the __get__ function')
+  throw new Error('you must implement the __get__ function')
 }
 
 e.__set__ = function () {
-  throw new Error('you have to implement the __set__ function')
+  throw new Error('you must implement the __set__ function')
 }
 
 function setup (index) {
