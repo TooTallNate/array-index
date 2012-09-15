@@ -6,20 +6,81 @@
 var debug = require('debug')('array-index')
 
 /**
- * Here's a pure JS implementation.
- * A harmony proxy impl could help.
+ * Module exports.
  */
 
 module.exports = ArrayIndex
+
+/**
+ * Subclass this.
+ */
+
 function ArrayIndex (length) {
-  this.__ensureLength__(length)
+  Object.defineProperty(this, 'length', {
+    get: getLength,
+    set: setLength,
+    enumerable: false,
+    configurable: false
+  })
+
+  Object.defineProperty(this, '__length', {
+    value: 0,
+    writable: true,
+    enumerable: false,
+    configurable: false
+  })
+
+  if (arguments.length > 0) {
+    this.length = length
+  }
 }
 
-var e = ArrayIndex.prototype
+/**
+ * You overwrite the "__get__" function in your subclass.
+ */
 
-e.__ensureLength__ = function ensureLength (_length) {
+ArrayIndex.prototype.__get__ = function () {
+  throw new Error('you must implement the __get__ function')
+}
+
+/**
+ * You overwrite the "__set__" function in your subclass.
+ */
+
+ArrayIndex.prototype.__set__ = function () {
+  throw new Error('you must implement the __set__ function')
+}
+
+/**
+ * Getter for the "length" property.
+ * Returns the value of the "__length" property.
+ */
+
+function getLength () {
+  debug('getting "length"', this.__length)
+  return this.__length
+}
+
+/**
+ * Setter for the "length" property.
+ * Calls "ensureLength()", then sets the "__length" property.
+ */
+
+function setLength (v) {
+  debug('setting "length"', v)
+  return this.__length = ensureLength(v)
+}
+
+/**
+ * Ensures that getters/setters from 0 up to "_length" have been defined
+ * on `ArrayIndex.prototype`.
+ *
+ * @api private
+ */
+
+function ensureLength (_length) {
   var length = _length | 0
-  var cur = e.__length__ | 0
+  var cur = ArrayIndex.prototype.__length__ | 0
   var num = length - cur
   if (num > 0) {
     var desc = {}
@@ -29,19 +90,19 @@ e.__ensureLength__ = function ensureLength (_length) {
     }
     debug('done creating descriptor object')
     debug('calling Object.defineProperties() with %d entries', num)
-    Object.defineProperties(e, desc);
+    Object.defineProperties(ArrayIndex.prototype, desc);
     debug('finished Object.defineProperties()')
-    e.__length__ = length
+    ArrayIndex.prototype.__length__ = length
   }
+  return length
 }
 
-e.__get__ = function () {
-  throw new Error('you must implement the __get__ function')
-}
-
-e.__set__ = function () {
-  throw new Error('you must implement the __set__ function')
-}
+/**
+ * Returns a property descriptor for the given "index", with "get" and "set"
+ * functions created within the closure.
+ *
+ * @api private
+ */
 
 function setup (index) {
   function get () {
@@ -57,9 +118,3 @@ function setup (index) {
     , set: set
   }
 }
-
-// just define the 100,000 entries for you.
-// takes like 450ms on my comp :\
-debug('defining the first 100,000 entries')
-e.__ensureLength__(100 * 1000)
-debug('DONE defining the first 100,000 entries!')
