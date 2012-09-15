@@ -69,3 +69,8 @@ assert.equal(30, a[10])
 
 // test "length"
 assert.equal(11, a.length)
+
+a[4] = 20
+a[6] = 5.55432
+var b = [0, 1, 2, 3, 80, 5, 33.325919999999996, 7, 8, 9, 30]
+assert.equal(JSON.stringify(b), JSON.stringify(a))

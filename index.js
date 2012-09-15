@@ -52,6 +52,41 @@ ArrayIndex.prototype.__set__ = function () {
 }
 
 /**
+ * Converts this array class into a real JavaScript Array. Note that this
+ * is a "flattened" array and your defined getters and setters won't be invoked
+ * when you interact with the returned Array. This function will call the
+ * getter on every array index of the object.
+ *
+ * @return {Array} The flattened array
+ * @api public
+ */
+
+ArrayIndex.prototype.toArray = function toArray () {
+  var i = 0, l = this.length, array = new Array(l)
+  for (; i < l; i++) {
+    array[i] = this[i]
+  }
+  return array
+}
+
+/**
+ * Basic support for `JSON.stringify()`.
+ */
+
+ArrayIndex.prototype.toJSON = function toJSON () {
+  return this.toArray()
+}
+
+/**
+ * toString() override. Use Array.prototype.toString().
+ */
+
+ArrayIndex.prototype.toString = function toString () {
+  var a = this.toArray();
+  return a.toString.apply(a, arguments)
+}
+
+/**
  * Getter for the "length" property.
  * Returns the value of the "__length" property.
  */
