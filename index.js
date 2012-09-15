@@ -20,14 +20,14 @@ function ArrayIndex (length) {
     get: getLength,
     set: setLength,
     enumerable: false,
-    configurable: false
+    configurable: true
   })
 
   Object.defineProperty(this, '__length', {
     value: 0,
     writable: true,
     enumerable: false,
-    configurable: false
+    configurable: true
   })
 
   if (arguments.length > 0) {
