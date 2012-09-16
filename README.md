@@ -23,6 +23,40 @@ $ npm install array-index
 Examples
 --------
 
+A quick silly example, using `Math.sqrt()` for the "getter":
+
+``` js
+var ArrayIndex = require('array-index')
+
+// let's just create a singleton instance.
+var a = new ArrayIndex()
+
+// the "__get__" function is invoked for each "a[n]" access.
+// it is given a single argument, the "index" currently being accessed.
+// so here, we're passing in the `Math.sqrt()` function, so accessing
+// "a[9]" will return `Math.sqrt(9)`.
+a.__get__ = Math.sqrt
+
+// the "__get__" and "__set__" functions are only invoked up
+// to "a.length", so we must set that manually.
+a.length = 10
+
+console.log(a)
+// [ 0,
+//   1,
+//   1.4142135623730951,
+//   1.7320508075688772,
+//   2,
+//   2.23606797749979,
+//   2.449489742783178,
+//   2.6457513110645907,
+//   2.8284271247461903,
+//   3,
+//   __get__: [Function: sqrt] ]
+```
+
+Here's an example of creating a subclass of `ArrayIndex` using `util.inherits()`:
+
 ``` js
 var ArrayIndex = require('array-index')
 var inherits = require('util').inherits
@@ -30,25 +64,35 @@ var inherits = require('util').inherits
 function MyArray (length) {
   // be sure to call the ArrayIndex constructor in your own constructor
   ArrayIndex.call(this, length)
+
+  // the "set" object will contain values at indexes previously set,
+  // so that they can be returned in the "getter" function. This is just a
+  // silly example, your subclass will have more meaningful logic.
+  Object.defineProperty(this, 'set', {
+    value: Object.create(null),
+    enumerable: false
+  })
 }
 
 // inherit from the ArrayIndex's prototype
 inherits(MyArray, ArrayIndex)
 
 MyArray.prototype.__get__ = function (index) {
+  if (index in this.set) return this.set[index]
   return index * 2
+}
+
+MyArray.prototype.__set__ = function (index, v) {
+  this.set[index] = v
 }
 
 
 // and now you can create some instances
-var a = new MyArray(100)
-a[0] // 0
-a[1] // 2
-a[2] // 4
-a[3] // 6
+var a = new MyArray(15)
+a[9] = a[10] = a[14] = '_'
+a[0] = 'nate'
 
-a[0] = 1
-// Error: you must implement the __set__ function
+console.log(a)
 ```
 
 
