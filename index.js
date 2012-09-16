@@ -3,6 +3,7 @@
  * Module dependencies.
  */
 
+var util = require('util')
 var debug = require('debug')('array-index')
 
 /**
@@ -84,6 +85,18 @@ ArrayIndex.prototype.toJSON = function toJSON () {
 ArrayIndex.prototype.toString = function toString () {
   var a = this.toArray();
   return a.toString.apply(a, arguments)
+}
+
+/**
+ * inspect() override. For the REPL.
+ */
+
+ArrayIndex.prototype.inspect = function inspect () {
+  var a = this.toArray()
+  Object.keys(this).forEach(function (k) {
+    a[k] = this[k]
+  }, this)
+  return util.inspect(a)
 }
 
 /**
