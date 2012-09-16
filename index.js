@@ -83,7 +83,7 @@ ArrayIndex.prototype.toJSON = function toJSON () {
  */
 
 ArrayIndex.prototype.toString = function toString () {
-  var a = this.toArray();
+  var a = this.toArray()
   return a.toString.apply(a, arguments)
 }
 
@@ -138,7 +138,7 @@ function ensureLength (_length) {
     }
     debug('done creating descriptor object')
     debug('calling Object.defineProperties() with %d entries', num)
-    Object.defineProperties(ArrayIndex.prototype, desc);
+    Object.defineProperties(ArrayIndex.prototype, desc)
     debug('finished Object.defineProperties()')
     ArrayIndex.prototype.__length__ = length
   }
