@@ -112,7 +112,7 @@ time to adjust the amount range where the getters/setters will be invoked.
 
 Returns a new regular Array instance with the same values that this ArrayIndex
 class would have. This function calls the `__get__` function repeatedly from
-`0...length` and returns the "flattened" array instance.
+`0...length-1` and returns the "flattened" array instance.
 
 ### "toJSON()" -> Array
 
