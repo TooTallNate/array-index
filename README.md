@@ -96,6 +96,38 @@ console.log(a)
 // [ 'nate', 2, 4, 6, 8, 10, 12, 14, 16, '_', '_', 22, 24, 26, '_' ]
 ```
 
+API
+---
+
+The `ArrayIndex` base class is meant to be subclassed, but it also has a few
+convenient functions built-in.
+
+### "length" -> Number
+
+The length of the ArrayIndex instance. The `__get__` and `__set__` functions will
+only be invoked on the object up to this "length". You may set this length at any
+time to adjust the amount range where the getters/setters will be invoked.
+
+### "toArray()" -> Array
+
+Returns a new regular Array instance with the same values that this ArrayIndex
+class would have. This function calls the `__get__` function repeatedly from
+`0...length` and returns the "flattened" array instance.
+
+### "toJSON()" -> Array
+
+All `ArrayIndex` instances get basic support for `JSON.stringify()`, which is
+the same as a "flattened" Array being stringified.
+
+### "toString()" -> String
+
+The `toString()` override is basically just `array.toArray().toString()`.
+
+### "format()" -> String
+
+The `inspect()` implementation for the REPL attempts to mimic what a regular
+Array looks like in the REPL.
+
 
 License
 -------
