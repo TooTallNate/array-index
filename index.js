@@ -7,6 +7,13 @@ var util = require('util')
 var debug = require('debug')('array-index')
 
 /**
+ * JavaScript Array "length" is bound to an unsigned 32-bit int.
+ * See: http://stackoverflow.com/a/6155063/376773
+ */
+
+var MAX_LENGTH = Math.pow(2, 32)
+
+/**
  * Module exports.
  */
 
@@ -127,7 +134,12 @@ function setLength (v) {
  */
 
 function ensureLength (_length) {
-  var length = _length | 0
+  var length
+  if (_length > MAX_LENGTH) {
+    length = MAX_LENGTH
+  } else {
+    length = _length | 0
+  }
   var cur = ArrayIndex.prototype.__length__ | 0
   var num = length - cur
   if (num > 0) {
