@@ -7,7 +7,7 @@
   , "setter"
   , "proxy"
   ]
-, "version": "0.0.3"
+, "version": "0.0.4"
 , "author": "Nathan Rajlich <nathan@tootallnate.net> (http://tootallnate.net)"
 , "repository": { "type": "git", "url": "git://github.com/TooTallNate/array-index.git" }
 , "main": "./index.js"
