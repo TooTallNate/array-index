@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git://github.com/TooTallNate/array-index.git"
   },
-  "main": "./index.js",
+  "main": "index.js",
   "scripts": {
     "test": "node test"
   },
