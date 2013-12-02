@@ -1,4 +1,13 @@
 
+0.1.0 / 2013-12-01
+==================
+
+  * add `History.md` file
+  * .travis.yml: test node v0.8-v0.11
+  * add component.json
+  * package: update "main" field
+  * package: beautify
+
 0.0.4 / 2013-09-27
 ==================
 
