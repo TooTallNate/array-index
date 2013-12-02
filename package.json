@@ -1,21 +1,27 @@
-{ "name": "array-index"
-, "description": "Invoke getter/setter functions on array-like objects"
-, "keywords": [
-    "index"
-  , "array"
-  , "getter"
-  , "setter"
-  , "proxy"
-  ]
-, "version": "0.0.4"
-, "author": "Nathan Rajlich <nathan@tootallnate.net> (http://tootallnate.net)"
-, "repository": { "type": "git", "url": "git://github.com/TooTallNate/array-index.git" }
-, "main": "./index.js"
-, "scripts": {
-      "test": "node test"
+{
+  "name": "array-index",
+  "description": "Invoke getter/setter functions on array-like objects",
+  "keywords": [
+    "index",
+    "array",
+    "getter",
+    "setter",
+    "proxy"
+  ],
+  "version": "0.0.4",
+  "author": "Nathan Rajlich <nathan@tootallnate.net> (http://tootallnate.net)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TooTallNate/array-index.git"
+  },
+  "main": "./index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "dependencies": {
+    "debug": "*"
+  },
+  "engines": {
+    "node": "*"
   }
-, "dependencies": {
-      "debug": "*"
-  }
-, "engines": { "node": "*" }
 }
