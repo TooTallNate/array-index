@@ -1,7 +1,7 @@
 array-index
 ===========
 ### Invoke getter/setter functions on array-like objects
-[![Build Status](https://secure.travis-ci.org/TooTallNate/array-index.png)](http://travis-ci.org/TooTallNate/array-index)
+[![Build Status](https://secure.travis-ci.org/TooTallNate/array-index.svg)](http://travis-ci.org/TooTallNate/array-index)
 
 
 This little module provides an `ArrayIndex` constructor function that you can
