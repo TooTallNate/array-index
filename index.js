@@ -112,7 +112,7 @@ ArrayIndex.prototype.inspect = function inspect () {
  */
 
 function getLength () {
-  debug('getting "length"', this.__length)
+  debug('getting "length": %o', this.__length)
   return this.__length
 }
 
@@ -122,7 +122,7 @@ function getLength () {
  */
 
 function setLength (v) {
-  debug('setting "length"', v)
+  debug('setting "length": %o', v)
   return this.__length = ensureLength(v)
 }
 
@@ -144,14 +144,14 @@ function ensureLength (_length) {
   var num = length - cur
   if (num > 0) {
     var desc = {}
-    debug('creating a descriptor object with %d entries', num)
+    debug('creating a descriptor object with %o entries', num)
     for (var i = cur; i < length; i++) {
       desc[i] = setup(i)
     }
     debug('done creating descriptor object')
-    debug('calling Object.defineProperties() with %d entries', num)
+    debug('calling `Object.defineProperties()` with %o entries', num)
     Object.defineProperties(ArrayIndex.prototype, desc)
-    debug('finished Object.defineProperties()')
+    debug('finished `Object.defineProperties()`')
     ArrayIndex.prototype.__length__ = length
   }
   return length
