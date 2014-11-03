@@ -9,9 +9,9 @@
     "setter",
     "proxy"
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
-    "visionmedia/debug": "*",
+    "visionmedia/debug": "*"
   },
   "development": {},
   "license": "MIT",

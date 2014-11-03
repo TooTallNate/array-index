@@ -1,4 +1,12 @@
 
+0.1.1 / 2014-11-03
+==================
+
+ * index: use `%o` debug formatters
+ * .travis: don't test node v0.9.x
+ * README: use svg for Travis badge
+ * add .jshintrc file
+
 0.1.0 / 2013-12-01
 ==================
 
