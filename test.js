@@ -74,3 +74,37 @@ a[4] = 20
 a[6] = 5.55432
 var b = [0, 1, 2, 3, 80, 5, 33.325919999999996, 7, 8, 9, 30]
 assert.equal(JSON.stringify(b), JSON.stringify(a))
+
+
+/**
+ * It should work when invoking as a Mixin.
+ */
+
+function Foo () {
+  ArrayIndex.call(this, 5);
+}
+var f = new Foo();
+
+// these throw because there's no __get__ and __set__ function defined
+assert.throws(function () {
+  f[0];
+});
+assert.throws(function () {
+  f[0] = 0
+});
+
+f.__get__ = function (index) {
+  return index * 2;
+};
+
+assert.equal(f[0], 0);
+assert.equal(f[1], 2);
+assert.equal(f[2], 4);
+assert.equal(f[3], 6);
+
+f.__set__ = function (index, value) {
+  this['foo' + index] = value;
+};
+
+f[1] = 'bar';
+assert.equal(f.foo1, 'bar');

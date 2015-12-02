@@ -123,24 +123,25 @@ function getLength () {
 
 function setLength (v) {
   debug('setting "length": %o', v)
-  return this.__length = ensureLength(v)
+  return this.__length = ensureLength(this, v)
 }
 
 /**
  * Ensures that getters/setters from 0 up to "_length" have been defined
- * on `ArrayIndex.prototype`.
+ * on `Object.getPrototypeOf(this)`.
  *
  * @api private
  */
 
-function ensureLength (_length) {
+function ensureLength (self, _length) {
   var length
   if (_length > MAX_LENGTH) {
     length = MAX_LENGTH
   } else {
     length = _length | 0
   }
-  var cur = ArrayIndex.prototype.__length__ | 0
+  var proto = Object.getPrototypeOf(self)
+  var cur = proto.__length__ | 0
   var num = length - cur
   if (num > 0) {
     var desc = {}
@@ -150,9 +151,9 @@ function ensureLength (_length) {
     }
     debug('done creating descriptor object')
     debug('calling `Object.defineProperties()` with %o entries', num)
-    Object.defineProperties(ArrayIndex.prototype, desc)
+    Object.defineProperties(proto, desc)
     debug('finished `Object.defineProperties()`')
-    ArrayIndex.prototype.__length__ = length
+    proto.__length__ = length
   }
   return length
 }
