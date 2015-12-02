@@ -1,4 +1,10 @@
 
+0.2.0 / 2015-12-02
+==================
+
+  * add support for invoking as a Mixin
+  * travis: test node v0.6
+
 0.1.1 / 2014-11-03
 ==================
 
