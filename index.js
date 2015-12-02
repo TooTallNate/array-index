@@ -149,7 +149,6 @@ function ensureLength (self, _length) {
     for (var i = cur; i < length; i++) {
       desc[i] = setup(i)
     }
-    debug('done creating descriptor object')
     debug('calling `Object.defineProperties()` with %o entries', num)
     Object.defineProperties(proto, desc)
     debug('finished `Object.defineProperties()`')
