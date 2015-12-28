@@ -8,6 +8,7 @@ var debug = require('debug')('array-index');
 
 var get = Symbol('get');
 var set = Symbol('set');
+var length = Symbol('length');
 
 /**
  * JavaScript Array "length" is bound to an unsigned 32-bit int.
@@ -28,7 +29,7 @@ ArrayIndex.set = set;
  * Subclass this.
  */
 
-function ArrayIndex (length) {
+function ArrayIndex (_length) {
   Object.defineProperty(this, 'length', {
     get: getLength,
     set: setLength,
@@ -36,15 +37,10 @@ function ArrayIndex (length) {
     configurable: true
   });
 
-  Object.defineProperty(this, '__length', {
-    value: 0,
-    writable: true,
-    enumerable: false,
-    configurable: true
-  });
+  this[length] = 0;
 
   if (arguments.length > 0) {
-    this.length = length;
+    setLength.call(this, _length);
   }
 }
 
@@ -123,22 +119,22 @@ ArrayIndex.prototype.inspect = function inspect () {
 
 /**
  * Getter for the "length" property.
- * Returns the value of the "__length" property.
+ * Returns the value of the "length" Symbol.
  */
 
 function getLength () {
-  debug('getting "length": %o', this.__length);
-  return this.__length;
+  debug('getting "length": %o', this[length]);
+  return this[length];
 };
 
 /**
  * Setter for the "length" property.
- * Calls "ensureLength()", then sets the "__length" property.
+ * Calls "ensureLength()", then sets the "length" Symbol.
  */
 
 function setLength (v) {
   debug('setting "length": %o', v);
-  return this.__length = ensureLength(this, v);
+  return this[length] = ensureLength(this, v);
 };
 
 /**
@@ -148,27 +144,27 @@ function setLength (v) {
  * @api private
  */
 
-function ensureLength (self, _length) {
-  var length;
-  if (_length > MAX_LENGTH) {
-    length = MAX_LENGTH;
+function ensureLength (self, _newLength) {
+  var newLength;
+  if (_newLength > MAX_LENGTH) {
+    newLength = MAX_LENGTH;
   } else {
-    length = _length | 0;
+    newLength = _newLength | 0;
   }
   var proto = Object.getPrototypeOf(self);
-  var cur = proto.__length | 0;
-  var num = length - cur;
+  var cur = proto[length] | 0;
+  var num = newLength - cur;
   if (num > 0) {
     var desc = {};
     debug('creating a descriptor object with %o entries', num);
-    for (var i = cur; i < length; i++) {
+    for (var i = cur; i < newLength; i++) {
       desc[i] = setup(i);
     }
     debug('calling `Object.defineProperties()` with %o entries', num);
     Object.defineProperties(proto, desc);
-    proto.__length = length;
+    proto[length] = newLength;
   }
-  return length;
+  return newLength;
 }
 
 /**

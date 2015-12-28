@@ -18,6 +18,7 @@ inherits(Arrayish, ArrayIndex)
 
 // create an instance and run some tests
 var a = new Arrayish(11)
+assert.equal(a.length, 11);
 
 assert.throws(function () {
   a[0]
