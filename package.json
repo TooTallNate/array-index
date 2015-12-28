@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "debug": "*",
-    "es6-symbol": "^3.0.2"
+    "es6-symbol": "^3.0.2",
+    "util-deprecate": "^1.0.2"
   },
   "engines": {
     "node": "*"

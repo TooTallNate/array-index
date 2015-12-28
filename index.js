@@ -4,6 +4,7 @@
  */
 
 var Symbol = require('es6-symbol');
+var deprecate = require('util-deprecate');
 var debug = require('debug')('array-index');
 
 var get = Symbol('get');
@@ -60,12 +61,42 @@ ArrayIndex.prototype[ArrayIndex.set] = function () {
   throw new Error('you must implement the `ArrayIndex.set` Symbol');
 };
 
-Object.defineProperty(ArrayIndex.prototype, '__get__', function () {
 
+// XXX: remove for v1.0.0
+var deprecatedGet = deprecate(
+  function (v) {
+    if ('function' === typeof v) {
+      return this[ArrayIndex.get] = v;
+    } else {
+      return this[ArrayIndex.get];
+    }
+  },
+  '`__get__` is deprecated, use `ArrayIndex.get` Symbol instead'
+);
+
+Object.defineProperty(ArrayIndex.prototype, '__get__', {
+  get: deprecatedGet,
+  set: deprecatedGet,
+  enumerable: false,
+  configurable: true
 });
 
-Object.defineProperty(ArrayIndex.prototype, '__get__', function () {
+var deprecatedSet = deprecate(
+  function (v) {
+    if ('function' === typeof v) {
+      return this[ArrayIndex.set] = v;
+    } else {
+      return this[ArrayIndex.set];
+    }
+  },
+  '`__set__` is deprecated, use `ArrayIndex.set` Symbol instead'
+);
 
+Object.defineProperty(ArrayIndex.prototype, '__set__', {
+  get: deprecatedSet,
+  set: deprecatedSet,
+  enumerable: false,
+  configurable: true
 });
 
 /**
