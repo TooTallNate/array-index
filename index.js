@@ -3,21 +3,20 @@
  * Module dependencies.
  */
 
-var util = require('util')
-var debug = require('debug')('array-index')
+var debug = require('debug')('array-index');
 
 /**
  * JavaScript Array "length" is bound to an unsigned 32-bit int.
  * See: http://stackoverflow.com/a/6155063/376773
  */
 
-var MAX_LENGTH = Math.pow(2, 32)
+var MAX_LENGTH = Math.pow(2, 32);
 
 /**
  * Module exports.
  */
 
-module.exports = ArrayIndex
+module.exports = ArrayIndex;
 
 /**
  * Subclass this.
@@ -29,17 +28,17 @@ function ArrayIndex (length) {
     set: setLength,
     enumerable: false,
     configurable: true
-  })
+  });
 
   Object.defineProperty(this, '__length', {
     value: 0,
     writable: true,
     enumerable: false,
     configurable: true
-  })
+  });
 
   if (arguments.length > 0) {
-    this.length = length
+    this.length = length;
   }
 }
 
@@ -48,7 +47,7 @@ function ArrayIndex (length) {
  */
 
 ArrayIndex.prototype.__get__ = function () {
-  throw new Error('you must implement the __get__ function')
+  throw new Error('you must implement the __get__ function');
 }
 
 /**
@@ -56,7 +55,7 @@ ArrayIndex.prototype.__get__ = function () {
  */
 
 ArrayIndex.prototype.__set__ = function () {
-  throw new Error('you must implement the __set__ function')
+  throw new Error('you must implement the __set__ function');
 }
 
 /**
@@ -70,11 +69,13 @@ ArrayIndex.prototype.__set__ = function () {
  */
 
 ArrayIndex.prototype.toArray = function toArray () {
-  var i = 0, l = this.length, array = new Array(l)
+  var i = 0;
+  var l = this.length;
+  var array = new Array(l);
   for (; i < l; i++) {
-    array[i] = this[i]
+    array[i] = this[i];
   }
-  return array
+  return array;
 }
 
 /**
@@ -82,7 +83,7 @@ ArrayIndex.prototype.toArray = function toArray () {
  */
 
 ArrayIndex.prototype.toJSON = function toJSON () {
-  return this.toArray()
+  return this.toArray();
 }
 
 /**
@@ -90,8 +91,8 @@ ArrayIndex.prototype.toJSON = function toJSON () {
  */
 
 ArrayIndex.prototype.toString = function toString () {
-  var a = this.toArray()
-  return a.toString.apply(a, arguments)
+  var a = this.toArray();
+  return a.toString.apply(a, arguments);
 }
 
 /**
@@ -99,11 +100,11 @@ ArrayIndex.prototype.toString = function toString () {
  */
 
 ArrayIndex.prototype.inspect = function inspect () {
-  var a = this.toArray()
+  var a = this.toArray();
   Object.keys(this).forEach(function (k) {
-    a[k] = this[k]
-  }, this)
-  return util.inspect(a)
+    a[k] = this[k];
+  }, this);
+  return a;
 }
 
 /**
@@ -112,8 +113,8 @@ ArrayIndex.prototype.inspect = function inspect () {
  */
 
 function getLength () {
-  debug('getting "length": %o', this.__length)
-  return this.__length
+  debug('getting "length": %o', this.__length);
+  return this.__length;
 }
 
 /**
@@ -122,8 +123,8 @@ function getLength () {
  */
 
 function setLength (v) {
-  debug('setting "length": %o', v)
-  return this.__length = ensureLength(this, v)
+  debug('setting "length": %o', v);
+  return this.__length = ensureLength(this, v);
 }
 
 /**
@@ -134,27 +135,27 @@ function setLength (v) {
  */
 
 function ensureLength (self, _length) {
-  var length
+  var length;
   if (_length > MAX_LENGTH) {
-    length = MAX_LENGTH
+    length = MAX_LENGTH;
   } else {
-    length = _length | 0
+    length = _length | 0;
   }
-  var proto = Object.getPrototypeOf(self)
-  var cur = proto.__length__ | 0
-  var num = length - cur
+  var proto = Object.getPrototypeOf(self);
+  var cur = proto.__length__ | 0;
+  var num = length - cur;
   if (num > 0) {
-    var desc = {}
-    debug('creating a descriptor object with %o entries', num)
+    var desc = {};
+    debug('creating a descriptor object with %o entries', num);
     for (var i = cur; i < length; i++) {
-      desc[i] = setup(i)
+      desc[i] = setup(i);
     }
-    debug('calling `Object.defineProperties()` with %o entries', num)
-    Object.defineProperties(proto, desc)
-    debug('finished `Object.defineProperties()`')
-    proto.__length__ = length
+    debug('calling `Object.defineProperties()` with %o entries', num);
+    Object.defineProperties(proto, desc);
+    debug('finished `Object.defineProperties()`');
+    proto.__length__ = length;
   }
-  return length
+  return length;
 }
 
 /**
@@ -166,15 +167,15 @@ function ensureLength (self, _length) {
 
 function setup (index) {
   function get () {
-    return this.__get__(index)
+    return this.__get__(index);
   }
   function set (v) {
-    return this.__set__(index, v)
+    return this.__set__(index, v);
   }
   return {
-      enumerable: true
-    , configurable: true
-    , get: get
-    , set: set
-  }
+    enumerable: true,
+    configurable: true,
+    get: get,
+    set: set
+  };
 }
