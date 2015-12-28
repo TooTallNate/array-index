@@ -3,7 +3,11 @@
  * Module dependencies.
  */
 
+var Symbol = require('es6-symbol');
 var debug = require('debug')('array-index');
+
+var get = Symbol('get');
+var set = Symbol('set');
 
 /**
  * JavaScript Array "length" is bound to an unsigned 32-bit int.
@@ -17,6 +21,8 @@ var MAX_LENGTH = Math.pow(2, 32);
  */
 
 module.exports = ArrayIndex;
+ArrayIndex.get = get;
+ArrayIndex.set = set;
 
 /**
  * Subclass this.
@@ -43,20 +49,28 @@ function ArrayIndex (length) {
 }
 
 /**
- * You overwrite the "__get__" function in your subclass.
+ * You overwrite the "get" Symbol in your subclass.
  */
 
-ArrayIndex.prototype.__get__ = function () {
-  throw new Error('you must implement the __get__ function');
-}
+ArrayIndex.prototype[ArrayIndex.get] = function () {
+  throw new Error('you must implement the `ArrayIndex.get` Symbol');
+};
 
 /**
- * You overwrite the "__set__" function in your subclass.
+ * You overwrite the "set" Symbol in your subclass.
  */
 
-ArrayIndex.prototype.__set__ = function () {
-  throw new Error('you must implement the __set__ function');
-}
+ArrayIndex.prototype[ArrayIndex.set] = function () {
+  throw new Error('you must implement the `ArrayIndex.set` Symbol');
+};
+
+Object.defineProperty(ArrayIndex.prototype, '__get__', function () {
+
+});
+
+Object.defineProperty(ArrayIndex.prototype, '__get__', function () {
+
+});
 
 /**
  * Converts this array class into a real JavaScript Array. Note that this
@@ -76,7 +90,7 @@ ArrayIndex.prototype.toArray = function toArray () {
     array[i] = this[i];
   }
   return array;
-}
+};
 
 /**
  * Basic support for `JSON.stringify()`.
@@ -84,7 +98,7 @@ ArrayIndex.prototype.toArray = function toArray () {
 
 ArrayIndex.prototype.toJSON = function toJSON () {
   return this.toArray();
-}
+};
 
 /**
  * toString() override. Use Array.prototype.toString().
@@ -93,7 +107,7 @@ ArrayIndex.prototype.toJSON = function toJSON () {
 ArrayIndex.prototype.toString = function toString () {
   var a = this.toArray();
   return a.toString.apply(a, arguments);
-}
+};
 
 /**
  * inspect() override. For the REPL.
@@ -105,7 +119,7 @@ ArrayIndex.prototype.inspect = function inspect () {
     a[k] = this[k];
   }, this);
   return a;
-}
+};
 
 /**
  * Getter for the "length" property.
@@ -115,7 +129,7 @@ ArrayIndex.prototype.inspect = function inspect () {
 function getLength () {
   debug('getting "length": %o', this.__length);
   return this.__length;
-}
+};
 
 /**
  * Setter for the "length" property.
@@ -125,7 +139,7 @@ function getLength () {
 function setLength (v) {
   debug('setting "length": %o', v);
   return this.__length = ensureLength(this, v);
-}
+};
 
 /**
  * Ensures that getters/setters from 0 up to "_length" have been defined
@@ -142,7 +156,7 @@ function ensureLength (self, _length) {
     length = _length | 0;
   }
   var proto = Object.getPrototypeOf(self);
-  var cur = proto.__length__ | 0;
+  var cur = proto.__length | 0;
   var num = length - cur;
   if (num > 0) {
     var desc = {};
@@ -152,8 +166,7 @@ function ensureLength (self, _length) {
     }
     debug('calling `Object.defineProperties()` with %o entries', num);
     Object.defineProperties(proto, desc);
-    debug('finished `Object.defineProperties()`');
-    proto.__length__ = length;
+    proto.__length = length;
   }
   return length;
 }
@@ -167,10 +180,10 @@ function ensureLength (self, _length) {
 
 function setup (index) {
   function get () {
-    return this.__get__(index);
+    return this[ArrayIndex.get](index);
   }
   function set (v) {
-    return this.__set__(index, v);
+    return this[ArrayIndex.set](index, v);
   }
   return {
     enumerable: true,

@@ -1,4 +1,3 @@
-
 var ArrayIndex = require('./')
 var inherits = require('util').inherits
 var assert = require('assert')
@@ -22,11 +21,11 @@ var a = new Arrayish(11)
 
 assert.throws(function () {
   a[0]
-}, /__get__/)
+}, /you must implement the `ArrayIndex.get` Symbol/)
 
 assert.throws(function () {
   a[0] = 0
-}, /__set__/)
+}, /you must implement the `ArrayIndex.set` Symbol/)
 
 
 /**
@@ -35,7 +34,7 @@ assert.throws(function () {
  * return the index as-is.
  */
 
-Arrayish.prototype.__get__ = function get (index) {
+Arrayish.prototype[ArrayIndex.get] = function get (index) {
   if (index in this.sets) {
     return +this.sets[index] * index
   } else {
@@ -47,7 +46,7 @@ Arrayish.prototype.__get__ = function get (index) {
  * Store the last value set for this index.
  */
 
-Arrayish.prototype.__set__ = function set (index, value) {
+Arrayish.prototype[ArrayIndex.set] = function set (index, value) {
   this.sets[index] = value
 }
 
@@ -93,7 +92,7 @@ assert.throws(function () {
   f[0] = 0
 });
 
-f.__get__ = function (index) {
+f[ArrayIndex.get] = function (index) {
   return index * 2;
 };
 
@@ -102,7 +101,7 @@ assert.equal(f[1], 2);
 assert.equal(f[2], 4);
 assert.equal(f[3], 6);
 
-f.__set__ = function (index, value) {
+f[ArrayIndex.set] = function (index, value) {
   this['foo' + index] = value;
 };
 

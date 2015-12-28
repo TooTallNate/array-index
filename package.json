@@ -20,7 +20,8 @@
     "test": "node test"
   },
   "dependencies": {
-    "debug": "*"
+    "debug": "*",
+    "es6-symbol": "^3.0.2"
   },
   "engines": {
     "node": "*"
