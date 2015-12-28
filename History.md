@@ -1,4 +1,13 @@
 
+0.9.0 / 2015-12-27
+==================
+
+  * add backwards compat logic with deprecate message
+  * add LICENSE field and entry in package.json
+  * convert to using es6 Symbols
+  * remove extraneous debug() calls
+  * travis: test moar Node.js versions
+
 0.2.0 / 2015-12-02
 ==================
 
