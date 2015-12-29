@@ -101,28 +101,28 @@ API
 The `ArrayIndex` base class is meant to be subclassed, but it also has a few
 convenient functions built-in.
 
-### "length" -> Number
+### "length" → Number
 
 The length of the ArrayIndex instance. The `ArrayIndex.get` and `ArrayIndex.set` functions will
 only be invoked on the object up to this "length". You may set this length at any
 time to adjust the amount range where the getters/setters will be invoked.
 
-### "toArray()" -> Array
+### "toArray()" → Array
 
 Returns a new regular Array instance with the same values that this ArrayIndex
 class would have. This function calls the `ArrayIndex.get` function repeatedly from
 `0...length-1` and returns the "flattened" array instance.
 
-### "toJSON()" -> Array
+### "toJSON()" → Array
 
 All `ArrayIndex` instances get basic support for `JSON.stringify()`, which is
 the same as a "flattened" Array being stringified.
 
-### "toString()" -> String
+### "toString()" → String
 
 The `toString()` override is basically just `array.toArray().toString()`.
 
-### "format()" -> String
+### "format()" → String
 
 The `inspect()` implementation for the REPL attempts to mimic what a regular
 Array looks like in the REPL.
