@@ -61,44 +61,6 @@ ArrayIndex.prototype[ArrayIndex.set] = function () {
   throw new Error('you must implement the `ArrayIndex.set` Symbol');
 };
 
-
-// XXX: remove for v1.0.0
-var deprecatedGet = deprecate(
-  function (v) {
-    if ('function' === typeof v) {
-      return this[ArrayIndex.get] = v;
-    } else {
-      return this[ArrayIndex.get];
-    }
-  },
-  '`__get__` is deprecated, use `ArrayIndex.get` Symbol instead'
-);
-
-Object.defineProperty(ArrayIndex.prototype, '__get__', {
-  get: deprecatedGet,
-  set: deprecatedGet,
-  enumerable: false,
-  configurable: true
-});
-
-var deprecatedSet = deprecate(
-  function (v) {
-    if ('function' === typeof v) {
-      return this[ArrayIndex.set] = v;
-    } else {
-      return this[ArrayIndex.set];
-    }
-  },
-  '`__set__` is deprecated, use `ArrayIndex.set` Symbol instead'
-);
-
-Object.defineProperty(ArrayIndex.prototype, '__set__', {
-  get: deprecatedSet,
-  set: deprecatedSet,
-  enumerable: false,
-  configurable: true
-});
-
 /**
  * Converts this array class into a real JavaScript Array. Note that this
  * is a "flattened" array and your defined getters and setters won't be invoked
@@ -169,7 +131,7 @@ function setLength (v) {
 };
 
 /**
- * Ensures that getters/setters from 0 up to "_length" have been defined
+ * Ensures that getters/setters from 0 up to "_newLength" have been defined
  * on `Object.getPrototypeOf(this)`.
  *
  * @api private
@@ -205,12 +167,30 @@ function ensureLength (self, _newLength) {
  * @api private
  */
 
+var deprecatedGet = deprecate(function (self, index) {
+  return self.__get__(index);
+}, '`__get__` is deprecated, use the `ArrayIndex.get` Symbol instead');
+
+var deprecatedSet = deprecate(function (self, index, v) {
+  return self.__set__(index, v);
+}, '`__set__` is deprecated, use the `ArrayIndex.set` Symbol instead');
+
 function setup (index) {
   function get () {
-    return this[ArrayIndex.get](index);
+    // XXX: remove __get__ for v1.0.0
+    if (this.__get__) {
+      return deprecatedGet(this, index);
+    } else {
+      return this[ArrayIndex.get](index);
+    }
   }
   function set (v) {
-    return this[ArrayIndex.set](index, v);
+    // XXX: remove __set__ for v1.0.0
+    if (this.__set__) {
+      return deprecatedSet(this, index, v);
+    } else {
+      return this[ArrayIndex.set](index, v);
+    }
   }
   return {
     enumerable: true,
