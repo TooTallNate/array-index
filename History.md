@@ -1,4 +1,11 @@
 
+0.9.1 / 2015-12-29
+==================
+
+  * fix backwards compat with tests
+  * README: update samples for new Symbols API
+  * travis: attempt to fix node v8
+
 0.9.0 / 2015-12-27
 ==================
 
