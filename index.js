@@ -4,7 +4,6 @@
  */
 
 var Symbol = require('es6-symbol');
-var deprecate = require('util-deprecate');
 var debug = require('debug')('array-index');
 
 var get = Symbol('get');
@@ -167,30 +166,12 @@ function ensureLength (self, _newLength) {
  * @api private
  */
 
-var deprecatedGet = deprecate(function (self, index) {
-  return self.__get__(index);
-}, '`__get__` is deprecated, use the `ArrayIndex.get` Symbol instead');
-
-var deprecatedSet = deprecate(function (self, index, v) {
-  return self.__set__(index, v);
-}, '`__set__` is deprecated, use the `ArrayIndex.set` Symbol instead');
-
 function setup (index) {
   function get () {
-    // XXX: remove __get__ for v1.0.0
-    if (this.__get__) {
-      return deprecatedGet(this, index);
-    } else {
-      return this[ArrayIndex.get](index);
-    }
+    return this[ArrayIndex.get](index);
   }
   function set (v) {
-    // XXX: remove __set__ for v1.0.0
-    if (this.__set__) {
-      return deprecatedSet(this, index, v);
-    } else {
-      return this[ArrayIndex.set](index, v);
-    }
+    return this[ArrayIndex.set](index, v);
   }
   return {
     enumerable: true,

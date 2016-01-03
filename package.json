@@ -20,9 +20,8 @@
     "test": "node test"
   },
   "dependencies": {
-    "debug": "*",
-    "es6-symbol": "^3.0.2",
-    "util-deprecate": "^1.0.2"
+    "debug": "^2.2.0",
+    "es6-symbol": "^3.0.2"
   },
   "engines": {
     "node": "*"
